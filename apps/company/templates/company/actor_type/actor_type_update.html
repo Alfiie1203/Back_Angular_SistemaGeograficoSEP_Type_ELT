@@ -1,0 +1,158 @@
+{% extends 'adminlte/base/base.html' %}
+{% load static i18n %}
+{% load widget_tweaks %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{% trans "Update" %} {% trans "Actor" %}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'proforest-dashboard1' %}">{% trans "Home" %}</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'commodity-list' %}">{% trans "Actor" %}</a></li>
+          <li class="breadcrumb-item active">{% trans "Update" %}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- /.col -->
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header p-2">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a class="nav-link active" href="#general" data-toggle="tab">{% trans "General information" %}</a></li>
+            </ul>
+          </div><!-- /.card-header -->
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="active tab-pane" id="general">
+                <form class="form-horizontal" action="" method="post">
+                  {% csrf_token %}
+
+                  <div class="row">
+
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Name in Spanish" %}</label>
+                          <div class="col-md-12">
+                            {% render_field form.name_es  class="form-control" %}
+                            {% for error in form.name_es.errors %}
+                              <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Name in English" %}</label>
+                          <div class="col-md-12">
+                            {% render_field form.name_en  class="form-control" %}
+                            {% for error in form.name_en.errors %}
+                              <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Name in Portuguese" %}</label>
+                          <div class="col-md-12">
+                            {% render_field form.name_pt  class="form-control" %}
+                            {% for error in form.name_pt.errors %}
+                              <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Code" %}</label>
+                          <div class="col-md-12">
+                            {% render_field form.proforest_actortype_code|append_attr:"readonly:readonly"  class="form-control" %}
+                            {% for error in form.proforest_actortype_code.errors %}
+                              <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Commodity" %}</label>
+                          <div class="col-md-12">
+                            <input type="text" name="commodity" value="{{commodity}}" class="form-control" readonly="readonly" required="" id="id_commodity">
+                          </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Is an Productor" %}</label>
+                          <label for="" class="col-md-12 col-form-label">
+                            {% render_field form.is_productor  data-bootstrap-switch=""%}
+                          </label>
+                          
+                        </div>
+                      </div>
+
+                      {% comment %} <div class="col-md-12">
+                        <div class="form-group row">
+                          <label for="" class="col-md-12 col-form-label">{% trans "Status" %}</label>
+                          <label for="" class="col-md-12 col-form-label">
+                            {% render_field form.status  data-bootstrap-switch=""%}
+                          </label>
+                          
+                        </div>
+                      </div> {% endcomment %}
+                    </div>
+  
+                  <div class="row">
+                    <div class="col mt-3">                
+                      <button type="submit" class="btn btn-primary" name="button">{% trans "Update" %}</button>
+                      <a href="{% url 'actor-type-list' %}" class="btn btn-default">{% trans "Back" %}</a>
+                    </div>
+                  </div>
+                  
+                </form>
+              </div>
+
+            </div>
+            <!-- /.tab-content -->
+          </div><!-- /.card-body -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+      </div>
+      <!-- /.col -->
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+
+<script type="text/javascript">
+  $("input[data-bootstrap-switch]").each(function(){
+    $(this).bootstrapSwitch('status', $(this).prop('checked'));
+  });
+</script>
+{% endblock %}

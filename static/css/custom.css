@@ -1,0 +1,17 @@
+.sidebar a {
+  color: #212429 !important;
+}
+.nav-item :hover {
+  background-color: #00a7b0a1 !important;
+  /*   color: #fff; */
+}
+
+.nav-sidebar .nav-item > .nav-link {
+  background-color: #4559934a;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary {
+  border-color: #018f97 !important;
+}

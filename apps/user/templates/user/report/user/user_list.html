@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Export</title>
+
+    <style>
+        @page {
+            size: letter landscape;
+            margin: 2cm;
+        }
+        * {
+            font-size: 16px;
+        }
+
+        #list_items tr {
+            border-bottom: 1px solid black;
+            border-top: 1px solid black;
+            padding: 1rem 0;
+        }
+
+        #list_items td {
+            padding: .6rem 0;
+            font-size: 12px;
+        }
+
+        .red {
+            width: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <table>
+        <tr>
+            <td>
+                <img src="{{ current_scheme_host }}{% static 'pdf/logo_zircon.png' %}" width="359";>
+            </td>
+            <td style="vertical-align: bottom; text-align: center;">
+                Product report - {% now "d M Y" %}
+            </td>
+        </tr>
+    </table>
+
+    <p style="margin: 2rem 0 0;">Exported by</p>
+    <p style="margin: 0 0 2rem;">
+        <strong>{{ user_report.full_name }}</strong>
+    </p>
+    <p></p>
+    <table style="border-collapse: collapse; width: 100%;" id="list_items">
+        <tbody>
+            <tr style="background-color: #80b12a; color: white; padding: 0.5rem 0; border: 0px;">
+                <td style="text-align: center; padding: 0.5rem 0;"><strong>Username</strong></td>
+                <td style="text-align: center; padding: 0.5rem 0;"><strong>Name</strong></td>
+                <td style="text-align: center; padding: 0.5rem 0;"><strong>Country</strong></td>
+                <td style="text-align: center; padding: 0.5rem 0;"><strong>Region</strong></td>
+                <td style="text-align: center; padding: 0.5rem 0;"><strong>City</strong></td>
+            </tr>
+            {% for object in object_list %}
+            <tr>
+                <td style="text-align: center;">{{ object.username }}</td>
+                <td style="text-align: center;">{{ object.first_name }} {{ object.surname }}</td>
+                <td style="text-align: center;">{{ object.get_country_display }}</td>
+                <td style="text-align: center;">{{ object.get_region_display }}</td>
+                <td style="text-align: center;">{{ object.get_city_display }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,127 @@
+{% load static i18n %}
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  {% block logo %}
+      <a href="/" class="brand-link">
+          <img src="{% static 'icons/sustentability.png' %}" alt="Proforest Logo" width="220" >
+      </a>
+  {% endblock %}
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    {% block user_panel %}
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          {% if request.user.image_profile %}
+            <img src="{{ request.user.image_profile.url }}" class="img-circle elevation-2" alt="User Image">
+          {% else %}
+            <img src="{% static 'adminlte-3.1.0/dist/img/unknow_user.png' %}" class="img-circle elevation-2" alt="User Image">
+          {% endif %}
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">{{ request.user.first_name }} {{ request.user.surname }}</a>
+        </div>
+      </div>
+    {% endblock %}
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+             with font-awesome or any other icon font library -->
+
+        <li class="nav-item">
+          <a href="{% url 'proforest-dashboard1' %}#" class="nav-link ml-1 {% if nav_inicio %}active{% endif %}">
+            <i class="nav-icon fas fa-home"></i>
+            <p>{% trans "Dashboard" %}</p>
+          </a>
+        </li>
+
+        {% if perms.user.view_user %}
+        <li class="nav-item">
+          <a href="{% url 'user-list' %}" class="nav-link ml-1 {% if nav_users %}active{% endif %} ">
+            <i class="fas fa-user nav-icon"></i>
+            <p>{% trans "Users" %}</p>
+          </a>
+        </li>
+        {% endif %}
+        {% if perms.user.view_role %}
+        <li class="nav-item">
+          <a href="{% url 'role-list' %}" class="nav-link ml-1 {% if nav_roles %}active{% endif %} ">
+            <i class="fas fa-user-tag nav-icon"></i>
+            <p>{% trans 'Role' %}</p>
+          </a>
+        </li>
+        {% endif %}
+        {% if perms.auth.view_group %}
+        <li class="nav-item">
+          <a href="{% url 'subrole-list' %}" class="nav-link ml-1 {% if nav_subroles %}active{% endif %} ">
+            <i class="fas fa-key nav-icon"></i>
+            <p>{% trans "Sub-Role and Permissions" %}</p>
+          </a>
+        </li>
+        {% endif %}
+
+        {% if perms.company.view_company %}
+        <li class="nav-item">
+          <a href="{% url 'company-list' %}" class="nav-link ml-1 {% if nav_company %}active{% endif %} ">
+            <i class="fas fa-building nav-icon"></i>
+            <p>{% trans "Companies" %}</p>
+          </a>
+        </li>
+        {% endif %}
+
+        {% if perms.company.view_commodity %}
+        <li class="nav-item">
+          <a href="{% url 'commodity-list' %}" class="nav-link ml-1 {% if nav_commodity %}active{% endif %} ">
+            <i class="fas fa-poll nav-icon"></i>
+            <p>{% trans "Commodity" %}</p>
+          </a>
+        </li>
+        {% endif %}
+
+        {% if perms.company.view_actortype %}
+        <li class="nav-item">
+          <a href="{% url 'actor-type-list' %}" class="nav-link ml-1 {% if nav_actor_type %}active{% endif %} ">
+            <i class="fas fa-marker nav-icon"></i>
+            <p>{% trans "Actors" %}</p>
+          </a>
+        </li>
+        {% endif %}
+        {% comment %} <li class="nav-item">
+          <a href="/questionbank/javascript/" class="nav-link ml-1">
+            <i class="nav-icon fas fa-sign-out-alt"></i>
+            <p>question bank test</p>
+          </a>
+        </li>  {% endcomment %}
+        {% if perms.suppybasedependency.view_supplibasedepencency %}
+        <li class="nav-item">
+          <a href="{% url 'supplybase-dependency-list' %}" class="nav-link ml-1 {% if nav_supplybasedependency %}active{% endif %} ">
+            <i class="fas fa-map nav-icon"></i>
+            <p>{% trans "Supply Base dependency" %}</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'emailtemplate-list' %}" class="nav-link ml-1 {% if nav_emailtemplate %}active{% endif %} ">
+            <i class="fas fa-file-code"> </i>
+            <p>{% trans "Email Custom Templates" %}</p>
+          </a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a href="{% url 'logout' %}" class="nav-link ml-1">
+            <i class="nav-icon fas fa-sign-out-alt"></i>
+            <p>{% trans "Log out" %}</p>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

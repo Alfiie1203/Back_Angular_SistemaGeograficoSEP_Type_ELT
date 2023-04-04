@@ -1,0 +1,5 @@
+grant_type: "client_credentials"
+client_id: "219c74ac-f010-4e58-b2a3-35c37c4d4717" 
+id_directorio_inquilino: "bed9cb80-212c-4239-82ed-e3ea6130d5ed"
+scope: "https://graph.microsoft.com/.default" 
+client_secret: "uAg8Q~axyKFmYtJLRzEd3eauEaXfjDyZ38ZUpdcy"

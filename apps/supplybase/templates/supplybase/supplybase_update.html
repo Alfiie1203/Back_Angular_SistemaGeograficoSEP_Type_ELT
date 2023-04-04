@@ -1,0 +1,139 @@
+{% extends 'adminlte/base/base.html' %}
+{% load static i18n %}
+{% load widget_tweaks %}
+
+{% block extra_css %}
+  <!-- Bootstrap4 Duallistbox -->
+  <link rel="stylesheet" href="{% static 'adminlte-3.1.0/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{% trans "Create" %} {% trans "Supply base dependency" %}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'proforest-dashboard1' %}">{% trans "Home" %}</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'subrole-list' %}">{% trans "Supply base dependency" %}</a></li>
+          <li class="breadcrumb-item active">{% trans "Create" %}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+
+{% get_current_language as LANGUAGE_CODE %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- /.col -->
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header p-2">
+            <ul class="nav nav-pills">
+              <li class="nav-item"><a class="nav-link active" href="#general" data-toggle="tab">{% trans "General information" %}</a></li>
+            </ul>
+          </div><!-- /.card-header -->
+          <div class="card-body">
+            <div class="tab-content">
+              <div class="active tab-pane" id="general">
+                <form class="form-horizontal" action="" method="post">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6">
+                    
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Actor Type" %}</label>
+                        <div class="col-md-9">
+                          <select name="actor_type" class="form-control" required="" id="id_actor_type">
+                             <option value="{{supplybaseDependency.actor_type.id}}">
+                              {% if LANGUAGE_CODE == 'es' %}
+                                {{supplybaseDependency.actor_type.name_es}}
+                              {% elif LANGUAGE_CODE == 'en' %}
+                                {{supplybaseDependency.actor_type.name_en}}
+                              {% elif LANGUAGE_CODE == 'pt' %}
+                                {{supplybaseDependency.actor_type.name_pt}}
+                              {% endif %}
+                             
+                             </option>
+                          </select>
+                          {% for error in form.actor_type.errors %}
+                            <p class="text-danger">{{ error }}</p>
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label>{% trans "Select Supply base dependency permissions" %}</label>
+                          <select class="duallistbox" multiple="multiple" name="actor_type_dependency" id="id_actor_type_dependency">
+                            {% for actor_type in actor_types %}
+                                  <option value="{{actor_type.pk}}"
+                                  {% if actor_type in dependencies %}
+                                  selected
+                                  {% endif %}
+                                  >
+                                  {% if LANGUAGE_CODE == 'es' %}
+                                    {{actor_type.commodity.name_es}} > {{actor_type.name_es}}
+                                  {% elif LANGUAGE_CODE == 'en' %}
+                                    {{actor_type.commodity.name_en}} > {{actor_type.name_en}}
+                                  {% elif LANGUAGE_CODE == 'pt' %}
+                                    {{actor_type.commodity.name_pt}} > {{actor_type.name_pt}}
+                                  {% endif %}
+                                  
+                                  </option>
+                                
+                            {% endfor %}
+                          </select>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  
+                  <div class="row mt-3">
+                    <button type="submit" class="btn btn-primary mr-2" name="button">{% trans "Save" %}</button>
+                    <a href="{% url 'supplybase-dependency-list'  %}" class="btn btn-default">{% trans "Back" %}</a>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <!-- /.tab-content -->
+          </div><!-- /.card-body -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+      </div>
+      <!-- /.col -->
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="{% static 'adminlte-3.1.0/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js' %}"></script>
+
+<script type="text/javascript">
+  $("input[data-bootstrap-switch]").each(function(){
+    $(this).bootstrapSwitch('state', $(this).prop('checked'));
+  });
+
+//Bootstrap Duallistbox
+$('.duallistbox').bootstrapDualListbox()
+
+</script>
+{% endblock %}

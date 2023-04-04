@@ -1,0 +1,397 @@
+{% extends 'adminlte/base/base.html' %}
+{% load static i18n %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'adminlte-3.1.0/plugins/sweetalert2/sweetalert2.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte-3.1.0/plugins/toastr/toastr.min.css' %}">
+<style media="screen">
+  .img-150 {
+    width: 150px;
+    height: 150px;
+    max-width: 150px;
+    max-height: 150px;
+    border: 1px solid #80b229;
+    border-radius: 5px;
+  }
+  .img-200 {
+    width: 200px;
+    height: 200px;
+    max-width: 200px;
+    max-height: 200px;
+    border: 1px solid #80b229;
+    border-radius: 5px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    {% if messages %}
+      <!-- Messages card -->
+      <div class="card bg-gradient-warning">
+        <div class="card-header border-1 ui-sortable-handle" style="cursor: move;">
+          <h3 class="card-title">
+            <ul class="messages">
+              {% for message in messages %}
+              <i class="fas fa-point mr-1"><li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li></i>
+              {% endfor %}
+          </ul>
+          </h3>
+          <div class="card-tools">
+            <button type="button" class="btn bg-danger btn-sm" data-card-widget="remove">
+            <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    <!-- /.card -->
+    {% endif %}
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">{% trans "Detail" %}</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{% url 'proforest-dashboard1' %}">{% trans "Home" %}</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'user-list' %}">{% trans "Users" %}</a></li>
+          <li class="breadcrumb-item active">{{ object.email }}</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="card card-widget widget-user">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="widget-user-header" style="background-color: #00a7b0; color: #fff;">
+            <h3 class="widget-user-username">{{ object.first_name }} {{ object.surname }}</h3>
+            <h5 class="widget-user-desc">{{ object.email }}</h5>
+          </div>
+          <div class="widget-user-image">
+            {% if object.image_profile %}
+              <img class="img-circle img-circle-90 elevation-2" src="{{ object.image_profile.url }}" alt="User Avatar">
+            {% else %}
+              <img class="img-circle img-circle-90 elevation-2" src="{% static 'adminlte-3.1.0/dist/img/unknow_user.png' %}" alt="User Avatar">
+            {% endif %}
+          </div>
+          <div class="card-footer">
+            <div class="row">
+              <div class="col-sm-4 border-right">
+                <div class="description-block">
+                  <span class="description-text">{% trans "Company" %}</span>
+                  <h5 class="description-header">{{ object.company }} </h5>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-4 border-right">
+                <div class="description-block">
+                  <span class="description-text">{% trans "Role" %}</span>
+                  <h5 class="description-header">{{ object.role }}</h5>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-4">
+                <div class="description-block">
+                  <span class="description-text">{% trans "sub-role" %}</span>
+                  <h5 class="description-header">
+                    {% for group in object.groups.all %}
+                    {{ group.name }}
+                    {% endfor %} 
+                  </h5>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+        </div>
+
+        
+      </div>
+      <!-- /.col -->
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="tab-content">
+
+              <div class="active tab-pane" id="general">
+                <form class="form-horizontal">
+                  
+                  <div class="row">
+                    <input id="object_id" type="hidden" name="object_id" value="{{ object.pk }}">
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Email" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.email }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 ">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Status" %}:</label>
+                        <div class="col-md-9">
+                          {% if object.status %}
+                            <button class="btn btn-primary btn-block" type="button"
+                                    name="button" onclick="deactivate_function('{{object.pk}}')">{% trans "Active" %}</button>
+                          {% else %}
+                            <button class="btn btn-danger btn-block" type="button"
+                                    name="button" onclick="activate_function('{{object.pk}}')">{% trans "Inactive" %}</button>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "First Name" %}</label>
+                        <div class="col-md-9">
+                          <input type="text" class="form-control" value="{{ object.first_name }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Second Name" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.second_name }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Surname" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.surname }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Second Surname" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.second_surname }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Phone" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.phone }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Country" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.country }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "Region" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.region }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group row">
+                        <label for="" class="col-md-3 col-form-label">{% trans "City" %}</label>
+                        <div class="col-md-9">
+                          <input type="email" class="form-control" value="{{ object.city }}" disabled>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </form>
+              </div>
+
+              <a href="{% url 'user-list' %}" class="btn btn-default">{% trans "Back" %}</a>
+
+            </div>
+            <!-- /.tab-content -->
+          </div><!-- /.card-body -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+      </div>
+      <!-- /.col -->
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'adminlte-3.1.0/plugins/bootstrap-switch/js/bootstrap-switch.min.js' %}"></script>
+<script src="{% static 'adminlte-3.1.0/plugins/sweetalert2/sweetalert2.min.js' %}"></script>
+<script src="{% static 'adminlte-3.1.0/plugins/toastr/toastr.min.js' %}"></script>
+
+<script type="text/javascript">
+
+  const object_id = document.getElementById('object_id');
+  const btn_verificar = document.getElementById('btn-verificar');
+
+  $("input[data-bootstrap-switch]").each(function(){
+    $(this).bootstrapSwitch('state', $(this).prop('checked'));
+  });
+
+  $('.btn-preview').on('click', function() {
+		$('.imagepreview').attr('src', $(this).attr('data-src'));
+		$('#imagemodal').modal('show');
+	});
+
+  {% if perms.user.update_user %}
+
+  function  activate_function(user_pk) {
+    Swal.fire({
+      title: 'Proceso de activación',
+      text: `Por favor seleccione si desea activar el usuario.`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'activar',
+      confirmButtonColor: '#28a745',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        activate_user(user_pk);
+      }
+    })
+  }
+
+  function activate_user (user_pk, action, notes='') {
+
+    let form_data = new FormData();
+		form_data.append("pk", user_pk);
+		form_data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+		url = Urls.user_activate();
+		fetch(url, {
+			method: 'post',
+			body: form_data,
+		})
+		.then((response) => {
+			return response.json();
+		})
+    .then((data) => {
+      if (data['status'] == 'success') {
+        Swal.fire({
+          title: `${data['title']}`,
+          text: `${data['message']}`,
+          icon: 'success',
+          confirmButtonText: "OK",
+          confirmButtonColor: '#80b229',
+        }).then((result) => {
+          location.reload();
+        });
+      }else{
+        Swal.fire({
+          title: `${data['title']}`,
+          text: data['message'],
+          icon: 'error',
+          confirmButtonText: "Cerrar",
+          confirmButtonColor: '#6e7d88',
+        });
+      }
+    })
+    .catch((error) => {
+      Swal.fire({
+        title: "Error al activar el Usuario",
+        text: "Error al procesar la solicitud, Contacte con su administrador!",
+        icon: 'error',
+        confirmButtonText: "Cerrar",
+        confirmButtonColor: '#6e7d88',
+      });
+    });
+  }
+
+  function  deactivate_function(user_pk) {
+    toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+    Swal.fire({
+      title: 'Proceso de desactivación',
+      text: `Por favor seleccione si desea desactivar el usuario.`,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'desactivar',
+      confirmButtonColor: '#f0ad4e',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deactivate_user(user_pk);
+      }
+    })
+  }
+
+  function deactivate_user (user_pk, action, notes='') {
+
+    let form_data = new FormData();
+		form_data.append("pk", user_pk);
+		form_data.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+		url = Urls.user_deactivate();
+		fetch(url, {
+			method: 'post',
+			body: form_data,
+		})
+		.then((response) => {
+			return response.json();
+		})
+    .then((data) => {
+      if (data['status'] == 'success') {
+        Swal.fire({
+          title: `${data['title']}`,
+          text: `${data['message']}`,
+          icon: 'warning',
+          confirmButtonText: "OK",
+          confirmButtonColor: '#80b229',
+        }).then((result) => {
+          location.reload();
+        });
+      }else{
+        Swal.fire({
+          title: `${data['title']}`,
+          text: data['message'],
+          icon: 'error',
+          confirmButtonText: "Cerrar",
+          confirmButtonColor: '#6e7d88',
+        });
+      }
+    })
+    .catch((error) => {
+      Swal.fire({
+        title: "Error al eliminar el Usuario",
+        text: "Error al procesar la solicitud, Contacte con su administrador!",
+        icon: 'error',
+        confirmButtonText: "Cerrar",
+        confirmButtonColor: '#6e7d88',
+      });
+    });
+  }
+{% endif %}
+
+</script>
+{% endblock %}
